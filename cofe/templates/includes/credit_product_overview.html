@@ -1,0 +1,10 @@
+<div class="credit-product-overview  toLeft">
+    <h2>{{ credit_product.name }}</h2>
+    <div><b>{{ credit_product.rate|floatformat }}%</b> {{credit_product.get_verbose_kind}}</div>
+    {% if credit_product.require_no_military_duty %}<div>Не должен угрожать призыв.</div>{% endif%}
+    {% if credit_product.max_age %}<div>Максимальный возраст <b>{{credit_product.max_age}} лет</b></div>{% endif%}
+    {% if credit_product.min_age %}<div>Минимальный возраст <b>{{credit_product.min_age}} лет</b></div>{% endif%}
+    {% if credit_product.max_amount %}<div>Максимальная сумма <b>{{credit_product.max_amount}}</b></div>{%endif%}
+    {% if credit_product.max_month_duration %}<div>Максимальный срок кредитования <b>{{credit_product.month_duration}}</b> месяцев</div>{% endif%}
+    {% if credit_product.min_month_duration %}<div>Минимальный срок кредитования <b>{{credit_product.month_duration}}</b> месяцев</div>{% endif%}
+</div>

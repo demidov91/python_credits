@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext as _
+from django.template.loader import render_to_string
 
 
 class CreditProduct(models.Model):
@@ -21,6 +22,16 @@ class CreditProduct(models.Model):
         (ACCEPT_RULE_OTHER, _('other')),
     )
 
+    KIND_ANNUITY = 0
+    KIND_FACTICAL = 1
+    KIND_PERCENTS = 2
+
+    KIND_CHOICES = (
+        (KIND_ANNUITY, _('ANNUITY')),
+        (KIND_FACTICAL, _('FACTICAL')),
+        (KIND_PERCENTS, _('PERCENTS')),
+    )
+
     name = models.CharField(max_length=120, null=False)
     is_enabled = models.BooleanField(default=False)
 
@@ -32,7 +43,18 @@ class CreditProduct(models.Model):
     #*max_amount* <= 2147483647 !
     max_amount = models.IntegerField()
     accept_rule = models.PositiveSmallIntegerField(choices=ACCEPT_RULE_CHOICES)
+    #kind of payments
+    kind = models.PositiveSmallIntegerField(choices=KIND_CHOICES, null=False, default=KIND_FACTICAL)
+
+    #%. usually, between 0 and 100, but can be higher.
+    rate = models.DecimalField(null=False, decimal_places=6, max_digits=11, default=20)
+    min_month_duration = models.PositiveSmallIntegerField(null=True, blank=True)
+    max_month_duration = models.PositiveSmallIntegerField(null=True, blank=True)
+
     other_requirements = models.TextField(null=True, blank=True)
+
+    def get_verbose_kind(self):
+        return render_to_string('includes/get_credit_verbose_name.html', {'credit': self})
 
 
 

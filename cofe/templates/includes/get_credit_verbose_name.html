@@ -1,0 +1,7 @@
+{% if credit.kind == credit.KIND_ANNUITY %}
+        аннуитет
+{% elif credit.kind == credit.KIND_FACTICAL %}
+        с уменьшением выплат
+{% else %}
+        выплата только процентов до конца периода
+{% endif %}

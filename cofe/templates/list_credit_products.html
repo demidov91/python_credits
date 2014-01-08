@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="text-center">
+{% for credit_product in credit_products %}
+    {% include 'includes/credit_product_overview.html' %}
+{% endfor %}
+</div>
+<div class="clear"></div>
+{% endblock %}

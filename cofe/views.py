@@ -5,6 +5,7 @@ from django.db import transaction
 
 from cofe.utils import is_external_user, is_bankworker, is_committee, is_client
 from cofe.forms import UserForm
+from cofe.models import CreditProduct
 
 def index(request):
     template_name = 'home.html'
@@ -22,11 +23,7 @@ def list_credit_requests(request):
     """
     pass
 
-def list_credit_requests_for_committee(request):
-    """
-    *request* GET parameters can contains passport_id to filter results.
-    """
-    pass
+
 
 
 
@@ -34,7 +31,7 @@ def add_credit_request(request):
     pass
 
 def select_credit_product(request):
-    pass
+    return render(request, 'list_credit_products.html', {'credit_products': CreditProduct.objects.filter(is_enabled=True)})
 
 @transaction.atomic
 def register(request):

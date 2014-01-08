@@ -12,8 +12,8 @@ urlpatterns = patterns('',
     url(r'^register/$', register, name='register'),
 
     url(r'^$', index, name='index'),
-    url(r'^$', add_credit_request, name='new_credit_request'),
-    url(r'^$', select_credit_product, name='select_credit_product'),
+    url(r'^request/add/$', add_credit_request, name='new_credit_request'),
+    url(r'^credit-products$', select_credit_product, name='select_credit_product'),
 
 
     url('^requests/$', list_credit_requests, name='credit_requests'),
