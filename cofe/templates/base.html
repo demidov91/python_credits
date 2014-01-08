@@ -21,7 +21,14 @@
                 <i>date placeholder</i>
             </div>
             <div id="logindisplay">
-            {% block logon %}{% endblock %}
+            {% if user.is_authenticated %}
+                <text class="inline-block">
+                    Welcome <strong>{{user.get_full_name }}</strong>!
+                    [ <form action="{% url 'logout' %}" method="post" >{%csrf_token%}<input id="logout" type="submit"value="Log Off" /></form> ]
+                </text>
+            {% else %}
+                [ <a href="{% url 'custom_logon' %}">Log On</a> ]
+            {% endif %}
             </div>
             {% block after_header %}{% endblock %}
         </header>

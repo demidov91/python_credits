@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Log On{% endblock %}
+
+{% block content %}
+<div id="log-on-part">
+    <h2>Log On</h2>
+    <p>
+        Please enter your user name and password. <a href="{% url 'register' %}">Register</a> if you don't have an account.
+    </p>
+
+    {% if form.non_field_errors %}
+    <div>
+        <p>Login was unsuccessful. Please correct the errors and try again</p>
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    <form action="." method="POST"  id="logon-form">{% csrf_token %}
+        <div>
+            <fieldset>
+                <legend>Account Information</legend>
+                {% for field in form.visible_fields %}
+                <div class="editor-label">
+                    {{ field.label_tag }}
+                </div>
+                <div class="editor-field">
+                    {{ field.errors }}
+                    {{ field }}
+                </div>
+                {% endfor %}
+
+                <input type="hidden" name="next" value="{% url 'index' %}" />
+
+                <p>
+                    <input type="submit" class="btn btn-primary" value="Log On" />
+                </p>
+            </fieldset>
+        </div>
+    </div>
+{% endblock %}

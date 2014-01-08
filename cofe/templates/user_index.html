@@ -1,0 +1,10 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    {{ block.super}}
+    {% if has_loan_requests %}
+    <div class="toLeft home-action-container">
+        <a href="{% url 'credit_requests' %}" class="btn">Your credit requests</a>
+    </div>
+    {% endif %}
+{% endblock %}
