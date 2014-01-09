@@ -178,13 +178,7 @@ List of requests
     cursor: pointer;
     }    
 
-/**
------------
-New credit request
-*/
-#new-credit-request-form #additional-info
-{
-    display: none;}
+
     
 /**
 ----------

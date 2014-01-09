@@ -14,18 +14,18 @@ def index(request):
     template_name = 'home.html'
     context = {}
     if request.user.is_authenticated():
-        credit_request_id = request.session.get('last_created_request_id')
-        if credit_request_id:
-            try:
-                CreditRequest.objects.filter(id=credit_request_id).update(user=request.user)
-            except CreditRequest.DoesNotExist:
-                pass
-            finally:
-                del request.session['last_created_request_id']
         if is_bankworker(request.user) or is_committee(request.user):
             return redirect('credit_requests')
         if is_client(request.user):
             template_name = 'user_index.html'
+            credit_request_id = request.session.get('last_created_request_id')
+            if credit_request_id:
+                try:
+                    CreditRequest.objects.filter(id=credit_request_id).update(user=request.user)
+                except CreditRequest.DoesNotExist:
+                    pass
+                finally:
+                    del request.session['last_created_request_id']
             if CreditRequest.objects.filter(user=request.user).exists():
                 context['has_loan_requests'] = True
     return render(request, template_name, context)
@@ -39,10 +39,10 @@ def list_credit_requests(request):
     if is_client(request.user):
         credit_requests = CreditRequest.objects.filter(user=request.user)
     else:
-        passport_id = request.GET.get('passport_id')
-        credit_requests = CreditRequest.objects.filter(passport_id=passport_id) if passport_id else CreditRequest.objects.all()
+        credit_requests = CreditRequest.objects.filter(**dict(request.GET.items()))
     return render(request, 'list_credit_requests.html', {
-        'credit_requests': tuple((credit_request, UpdateCreditRequest(None, credit_request)) for credit_request in credit_requests)
+        'credit_requests': tuple((credit_request, UpdateCreditRequest(None, credit_request)) for credit_request in credit_requests),
+        'filter': dict(request.GET.items()),
     })
 
 

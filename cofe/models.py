@@ -163,7 +163,7 @@ class CreditRequest(models.Model):
             return None
 
     def set_user_message(self, new_message):
-        try:
-            return CreditRequestNotes.objects.filter(processing__credit_request=self).update(message=new_message)
-        except CreditRequestNotes.DoesNotExist:
-            return None
+        processing = CreditRequestProcessing.objects.get(credit_request=self)
+        note = CreditRequestNotes.objects.get_or_create(processing=processing)[0]
+        note.message = new_message
+        note.save()

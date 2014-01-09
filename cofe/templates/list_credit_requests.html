@@ -9,6 +9,17 @@
 
 {% block content %}
 <div class="center-info">
+{% if not is_client %}
+<h2>Enter passport number to view this person's requests:</h2>
+<form action="" method="get">
+<div>
+    <input name="passport_id__icontains" id="passport-id-to-view-request" type="text" />
+    <input type="submit" class="btn btn-success" />
+</div>
+</form>
+{% endif %}
+
+
 {% if not credit_requests %}
 <div><i>No credit requests.</i></div>
 {% else %}

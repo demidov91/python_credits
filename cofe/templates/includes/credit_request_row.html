@@ -1,8 +1,8 @@
 
             <td>{% csrf_token%}
                 <div class="view">
-                    <div class="amount">{{ credit_request.amount }}</div>
-                    <div>{{ credit_request.duration }} months</div>
+                    <div class="amount">{{ credit_request.amount|default_if_none:'' }}</div>
+                    <div>{% if credit_request.duration %}{{ credit_request.duration }} months{% endif%}</div>
                 </div>
                 <div class="edit">
                     <div class="amount">{{ form.amount }}</div>
@@ -22,11 +22,11 @@
                 </div>
             </td>
             <td>
-                <div class="view">{{ credit_request.month_income }}</div>
+                <div class="view">{{ credit_request.month_income|default_if_none:'' }}</div>
                 <div class="edit">{{ form.month_income }}</div>
             </td>
             <td>
-                <div class="view">{{ credit_request.passport_id }}</div>
+                <div class="view">{{ credit_request.passport_id|default_if_none:'' }}</div>
                 <div class="edit">{{ form.passport_id }}</div>
             </td>
             <td>

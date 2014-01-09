@@ -37,18 +37,11 @@
     {{ form.passport_id }}
 </div>
 
-{% if form.non_field_errors %}
-<div class="inline-form-line">
-    <label>Force save</label>
-    {{ form.force_save }}
-    {% comment %}@Html.CheckBoxFor(x => x.ForceSave, new { @id="force-save"}){% endcomment %}
-</div>
+
 <div id="additional-info">
     <label>Additional info:</label>
-    {% comment %}@Html.TextAreaFor(x => x.CreditRequest.AdditionalTextInfo){% endcomment %}
     {{ form.additional_text_info }}
 </div>
-{% endif %}
 
 <input id="ok-for-new-credit-request" class="btn btn-primary" type="submit"/>
 

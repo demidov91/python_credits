@@ -20,7 +20,7 @@ class CreditRequestForm(ModelForm):
     class Meta:
         model = CreditRequest
         widgets = {
-            'additional_text_info': forms.widgets.Textarea,
+            'additional_text_info': forms.Textarea,
         }
         exclude = ('credit_product', )
 
@@ -32,6 +32,9 @@ class CreditRequestForm(ModelForm):
         super(CreditRequestForm, self).__init__(data, *args, **kwargs)
         for _required in self._required_for_data:
             self.fields[_required].required = True
+        instance = kwargs.get('instance')
+        if instance:
+            self.fields['additional_text_info'].initial = instance.get_user_message()
 
     def clean(self):
         cleaned_data = super(CreditRequestForm, self).clean()
@@ -47,8 +50,8 @@ class CreditRequestForm(ModelForm):
         instance = super(CreditRequestForm, self).save(*args, **kwargs)
         if author and not author.is_authenticated():
             author = None
-        if kwargs.get('commit', True) and getattr(self, 'additional_text_info', None):
-            instance.set_user_message(self.additional_text_info)
+        if kwargs.get('commit', True) and self.cleaned_data['additional_text_info']:
+            instance.set_user_message(self.cleaned_data['additional_text_info'])
         return instance
 
 
