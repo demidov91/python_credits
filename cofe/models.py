@@ -38,10 +38,8 @@ class CreditProduct(models.Model):
     require_no_military_duty = models.BooleanField(blank=True, default=False)
     max_age = models.PositiveSmallIntegerField(null=True, blank=True)
     min_age = models.PositiveSmallIntegerField(null=True, blank=True)
-    #*min_pure_month_income* <= 2147483647 !
-    min_pure_month_income = models.IntegerField(null=True, blank=True)
-    #*max_amount* <= 2147483647 !
-    max_amount = models.IntegerField()
+    min_pure_month_income = models.BigIntegerField(null=True, blank=True)
+    max_amount = models.BigIntegerField()
     accept_rule = models.PositiveSmallIntegerField(choices=ACCEPT_RULE_CHOICES)
     #kind of payments
     kind = models.PositiveSmallIntegerField(choices=KIND_CHOICES, null=False, default=KIND_FACTICAL)
@@ -56,15 +54,10 @@ class CreditProduct(models.Model):
     def get_verbose_kind(self):
         return render_to_string('includes/get_credit_verbose_name.html', {'credit': self})
 
+    def __unicode__(self):
+        return self.name
 
 
-
-
-class CreditRequest(models.Model):
-    passport_id = models.CharField(validators=[RegexValidator(regex='[A-Z]{2}\d{7}'), ], max_length=9, null=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
-    credit_product = models.ForeignKey(CreditProduct)
-    amount = models.IntegerField(null=False)
 
 
 class Credit(models.Model):
@@ -100,7 +93,7 @@ class CreditRequestProcessing(models.Model):
         (ACCEPT_NO, _('no')),
     )
 
-    credit_request = models.OneToOneField(CreditRequest, null=False)
+    credit_request = models.OneToOneField('CreditRequest', null=False)
     credit = models.OneToOneField(Credit, null=True, blank=True)
     bank_worker_acceptance = models.PositiveSmallIntegerField(choices=BANK_WORKER_CHOICES, null=True, blank=True)
     committee_acceptance = models.PositiveSmallIntegerField(choices=BANK_WORKER_CHOICES, null=True, blank=True)
@@ -108,8 +101,69 @@ class CreditRequestProcessing(models.Model):
 
 class CreditRequestNotes(models.Model):
     processing = models.ForeignKey(CreditRequestProcessing, null=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=False)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     message = models.TextField(null=False)
+    datetime_created = models.DateTimeField(auto_now_add=True, null=False, blank=True)
+    last_modified = models.DateTimeField(auto_now=True, null=False, blank=True)
 
 
+class CreditRequest(models.Model):
+    passport_id = models.CharField(validators=[RegexValidator(regex='[A-Z]{2}\d{7}'), ], max_length=9, null=True, blank=True, default='EX1234567')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    credit_product = models.ForeignKey(CreditProduct, null=True, blank=True)
+    amount = models.BigIntegerField(null=True, blank=True, default=0)
+    month_income = models.IntegerField(null=True, blank=True, default=0)
+    duration = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+    datetime_created = models.DateTimeField(auto_now_add=True, null=False, blank=True)
+    last_modified = models.DateTimeField(auto_now=True, null=False, blank=True)
 
+    def check_amount(self):
+        """
+        returns: False if credit_product can serve requested money amount. True if credit_product wasn't set.
+        """
+        return self.amount and not self.credit_product or not self.credit_product.max_amount \
+            or self.credit_product.max_amount >= self.amount
+
+    def check_month_income(self):
+        """
+        See 'check_amount' comments.
+        """
+        return self.month_income and  not self.credit_product or not self.credit_product.min_pure_month_income \
+            or self.credit_product.min_pure_month_income <= self.month_income
+
+    def check_duration(self):
+        """
+        See 'check_amount' comments.
+        """
+        return self.duration and not self.credit_product \
+            or not self.credit_product.min_month_duration or not self.credit_product.max_month_duration \
+            or self.credit_product.min_month_duration <= self.duration <= self.credit_product.max_month_duration
+
+    def check_credit_product(self):
+        if not self.credit_product:
+            raise ValueError('Credit product wasnt set.')
+        return self.check_amount() and self.check_month_income() and self.check_duration()
+
+    def try_credit_product(self, credit_product):
+        prev_credit_product = self.credit_product
+        self.credit_product = credit_product
+        try:
+            return self.check_credit_product()
+        finally:
+            self.credit_product = prev_credit_product
+
+    def save(self, *args, **kwargs):
+        super(CreditRequest, self).save(*args, **kwargs)
+        CreditRequestProcessing.objects.get_or_create(credit_request=self)
+
+    def get_user_message(self):
+        try:
+            return CreditRequestNotes.objects.get(processing__credit_request=self).message
+        except CreditRequestNotes.DoesNotExist:
+            return None
+
+    def set_user_message(self, new_message):
+        try:
+            return CreditRequestNotes.objects.filter(processing__credit_request=self).update(message=new_message)
+        except CreditRequestNotes.DoesNotExist:
+            return None

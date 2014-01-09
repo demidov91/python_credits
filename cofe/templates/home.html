@@ -3,15 +3,17 @@
 {% block title %}Index{% endblock%}
 
 {% block content %}
-<div id="user-home-content" class="anonimus">
-    <div class="toLeft">
-        <a href="{% url 'new_credit_request'%}" class="btn">Add credit request</a>
+    <div id="user-home-content" class="anonimus">
+        {% block actions %}
+        <div class="toLeft">
+            <a href="{% url 'new_credit_request'%}" class="btn">Add credit request</a>
+        </div>
+        <div class="toLeft">
+            <a href="{% url 'select_credit_product'%}" class="btn">View our credit lines</a>
+        </div>
+        {% endblock %}
     </div>
-    <div class="toLeft">
-        <a href="{% url 'select_credit_product'%}" class="btn">View our credit lines</a>
+    <div class="clear">
     </div>
-</div>
-<div class="clear"> 
-</div>
 
 {% endblock %}

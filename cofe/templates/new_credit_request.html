@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/newRequest.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="center-info">
+<h2>Create credit request</h2>
+{% if form.non_field_errors %}
+    {{ form.non_field_errors }}
+{% endif %}
+
+<form action="." method="POST" id="new-credit-request-form">{% csrf_token%}
+    <div>
+    <label>Enter amount of money, you want to receive:</label>
+    {{ form.errors.amount }}
+    {{ form.amount }}
+</div>
+
+<div>
+    <label>Enter number of months:</label>
+    {{ form.errors.duration }}
+    {{ form.duration}}
+</div>
+
+<div>
+    <label>Your average salary:</label>
+    {{ form.errors.month_income }}
+    {{ form.month_income }}
+</div>
+
+<div>
+    <label>Passport number:</label>
+    {{ form.errors.passport_id }}
+    {{ form.passport_id }}
+</div>
+
+{% if form.non_field_errors %}
+<div class="inline-form-line">
+    <label>Force save</label>
+    {{ form.force_save }}
+    {% comment %}@Html.CheckBoxFor(x => x.ForceSave, new { @id="force-save"}){% endcomment %}
+</div>
+<div id="additional-info">
+    <label>Additional info:</label>
+    {% comment %}@Html.TextAreaFor(x => x.CreditRequest.AdditionalTextInfo){% endcomment %}
+    {{ form.additional_text_info }}
+</div>
+{% endif %}
+
+<input id="ok-for-new-credit-request" class="btn btn-primary" type="submit"/>
+
+</form>
+
+</div>
+
+
+{% endblock %}

@@ -5,16 +5,16 @@
 
 
 #background{
-background: linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
-background: -moz-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
-background: -webkit-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
-background: -o-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
-width:100%;
-position: absolute;
-top:0px;
-left: 0px;
-height: 100%;
-z-index: -1;
+	background: linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
+	background: -moz-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
+	background: -webkit-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
+	background: -o-linear-gradient(90deg, #DCEDE4 0%, #FFFFFF 100%) no-repeat;
+	width:100%;
+	position: absolute;
+	top:0px;
+	left: 0px;
+	height: 100%;
+	z-index: -1;
 }
 
 
@@ -270,7 +270,11 @@ List of active credits
 List of credit products.
 */
 .credit-product-overview{
-	width: 33%;
+	width:27%;
+	margin:0 2%;
+}
+
+.credit-product-overview>.description{
 	 background: none repeat scroll 0 0 green;
     color: white;
     display: inline-block;
@@ -282,12 +286,18 @@ List of credit products.
     padding: 1em 1.2em 1em;
     text-transform: uppercase;
     transition: all 0s ease 0s;
-border-radius: 10px 10px 10px 10px;
--moz-border-radius: 10px 10px 10px 10px;
--webkit-border-radius: 10px 10px 10px 10px;
-border: 0px solid #000000;
-font-family: charcoal-regular;
-	width:27%;
-	margin:1%;
+	border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	border: 0px solid #000000;
+	font-family: charcoal-regular;
+	width: 100%;
+}
+.credit-product-overview form{
+	visibility: hidden;
+	margin: 1.2em 0px;
+}
+.credit-product-overview:hover form{
+	visibility: visible;
 }
 

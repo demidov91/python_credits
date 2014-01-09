@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content%}
+<div class="center-info">
+    <h2>Credit request has been sucessfuly created.</h2>
+    <div>
+        <p>Go to our bank in 2 weeks with passport <b>{{ credit_request.passport_id}}</b></p>
+    </div>
+    {% if not user.is_authenticated %}
+    <div>Do you want to <a href="{% url 'custom_logon' %}">login</a> or <a href="{% url 'register' %}">register</a> and attach this request to your account?</div>
+    {% endif %}
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}ListForUser{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/lib/jquery.form.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/listRequestsForUser.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="center-info">
+{% if not credit_requests %}
+<div><i>No credit requests.</i></div>
+{% else %}
+    <table id="list-of-requests" class="all-available-width">
+        <tr>
+            <td>Money/duration</td>
+            <td>Credit product</td>
+            <td>Month salary</td>
+            <td>Passport number</td>
+            <td>Additional info</td>
+            <td></td>
+        </tr>
+    {% for credit_request, form in credit_requests %}
+     <tr class="view like-a-form" data-update-url="{% url 'update_credit_request-ajax' credit_request_id=credit_request.id %}">
+        {% include 'includes/credit_request_row.html' %}
+     </tr>
+     {% endfor %}
+    </table>
+{% endif %}
+</div>
+{% endblock %}

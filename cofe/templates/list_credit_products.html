@@ -2,6 +2,11 @@
 
 
 {% block content %}
+{% if credit_request_id %}
+    <h6>
+        Здесь показаны только кредитные продукты подходящие под <a href="{% url 'new_credit_request' credit_request_id=credit_request_id %}">введённые Вами критерии</a>.
+    <h6>
+{% endif %}
 <div class="text-center">
 {% for credit_product in credit_products %}
     {% include 'includes/credit_product_overview.html' %}

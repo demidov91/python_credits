@@ -1,0 +1,52 @@
+
+            <td>{% csrf_token%}
+                <div class="view">
+                    <div class="amount">{{ credit_request.amount }}</div>
+                    <div>{{ credit_request.duration }} months</div>
+                </div>
+                <div class="edit">
+                    <div class="amount">{{ form.amount }}</div>
+                    <div>{{ form.duration }} months</div>
+                </div>
+            </td>
+            <td>
+                <div class="view">
+                    {% if credit_request.credit_product%}
+                        {{ credit_request.credit_product.name }}
+                    {% else %}
+                        <p><b>Not specified.</b></p>
+                    {% endif %}
+                </div>
+                <div class="edit">
+                    {{ form.credit_product }}
+                </div>
+            </td>
+            <td>
+                <div class="view">{{ credit_request.month_income }}</div>
+                <div class="edit">{{ form.month_income }}</div>
+            </td>
+            <td>
+                <div class="view">{{ credit_request.passport_id }}</div>
+                <div class="edit">{{ form.passport_id }}</div>
+            </td>
+            <td>
+                <div class="view">
+                    {% if credit_request.get_user_message %}{{ credit_request.get_user_message }}{% endif %}
+                </div>
+                <div class="edit">
+                    {{ form.additional_text_info }}
+                </div>
+            </td>
+            <td>
+                <div class="view">
+                    <button class="btn {% if credit_request.credit_product %}btn-success{% else %}btn-warning{%endif%} edit-row">
+                        Edit
+                    </button>
+                </div>
+                <div class="edit">
+                    <a href="#" class="btn {% if credit_request.credit_product %}btn-success{% else %}btn-warning{% endif %} save-row">
+                        Save
+                    </a>
+                </div>
+            </td>
+        </tr>
