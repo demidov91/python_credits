@@ -1,2 +1,4 @@
 *.pyc
 *~
+db.sqlite3
+credits_site/local_settings.py
